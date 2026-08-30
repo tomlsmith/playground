@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust:
+    name: Rust adapter
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Install Rust toolchain
+        run: rustup toolchain install
+      - name: Cache Rust artifacts
+        uses: Swatinem/rust-cache@v2
+      - name: Record resolved TomlSmith package
+        run: |
+          version=$(cargo metadata --locked --format-version 1 | jq --exit-status --raw-output '.packages[] | select(.name == "tomlsmith") | .version')
+          echo "tomlsmith crate ${version}" >> "$GITHUB_STEP_SUMMARY"
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Run adapter tests
+        run: cargo test --locked --all-features
+      - name: Lint adapter
+        run: cargo clippy --locked --all-targets --all-features -- -D warnings
+      - name: Compile WebAssembly target
+        run: cargo build --locked --target wasm32-unknown-unknown --release
+
+  web:
+    name: Browser workbench
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Install Rust toolchain
+        run: rustup toolchain install
+      - name: Cache Rust artifacts
+        uses: Swatinem/rust-cache@v2
+      - name: Record resolved TomlSmith package
+        id: core
+        run: |
+          version=$(cargo metadata --locked --format-version 1 | jq --exit-status --raw-output '.packages[] | select(.name == "tomlsmith") | .version')
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tomlsmith crate ${version}" >> "$GITHUB_STEP_SUMMARY"
+      - name: Cache wasm-bindgen CLI
+        id: cache-wasm-bindgen
+        uses: actions/cache@v6
+        with:
+          path: ~/.cargo/bin/wasm-bindgen*
+          key: wasm-bindgen-cli-0.2.101-${{ runner.os }}
+      - name: Install wasm-bindgen CLI
+        if: steps.cache-wasm-bindgen.outputs.cache-hit != 'true'
+        run: cargo install wasm-bindgen-cli --version 0.2.101 --locked
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.22.0
+      - name: Install Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Test generated WebAssembly and UI
+        run: pnpm test
+      - name: Type-check frontend
+        run: pnpm typecheck
+      - name: Build production site
+        run: pnpm build
+        env:
+          VITE_TOMLSMITH_CORE_VERSION: ${{ steps.core.outputs.version }}
+      - name: Upload production site
+        uses: actions/upload-artifact@v7
+        with:
+          name: playground-dist
+          path: dist
+          if-no-files-found: error

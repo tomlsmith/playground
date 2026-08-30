@@ -1,0 +1,22 @@
+/target/
+node_modules/
+dist/
+web/public/wasm/
+web/src/generated/
+coverage/
+*.crate
+*.tar.gz
+*.tgz
+*.zip
+*.wasm
+.DS_Store
+*.log
+
+# Local decision records, research, and plans are not release artifacts.
+/CONTEXT.md
+/docs/adr/
+/docs/audits/
+/docs/plans/
+/docs/research/
+/docs/reviews/
+/docs/roadmap.md

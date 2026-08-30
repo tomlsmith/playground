@@ -1,0 +1,94 @@
+# Deploys the playground to GitHub Pages as a project site.
+#
+# Project sites are served at https://<org>.github.io/<repo-name>/, layered
+# over the organization site, so the public URL follows the repository name:
+# name the GitHub repository "playground" to serve it at
+# https://tomlsmith.github.io/playground/. The Vite base path below is derived
+# from the repository name automatically, so either name just works.
+#
+# One-time setup on the repository: Settings → Pages → Source: GitHub Actions.
+
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build playground
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Install Rust toolchain
+        run: rustup toolchain install
+      - name: Cache Rust artifacts
+        uses: Swatinem/rust-cache@v2
+      - name: Record resolved TomlSmith package
+        id: core
+        run: |
+          version=$(cargo metadata --locked --format-version 1 | jq --exit-status --raw-output '.packages[] | select(.name == "tomlsmith") | .version')
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tomlsmith crate ${version}" >> "$GITHUB_STEP_SUMMARY"
+      - name: Cache wasm-bindgen CLI
+        id: cache-wasm-bindgen
+        uses: actions/cache@v6
+        with:
+          path: ~/.cargo/bin/wasm-bindgen*
+          key: wasm-bindgen-cli-0.2.101-${{ runner.os }}
+      - name: Install wasm-bindgen CLI
+        if: steps.cache-wasm-bindgen.outputs.cache-hit != 'true'
+        run: cargo install wasm-bindgen-cli --version 0.2.101 --locked
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.22.0
+      - name: Install Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Test generated WebAssembly and UI
+        run: pnpm test
+      - name: Type-check frontend
+        run: pnpm exec tsc --project web/tsconfig.json --noEmit
+      - name: Build production site
+        run: pnpm exec vite build --config web/vite.config.ts --base="/${{ github.event.repository.name }}/"
+        env:
+          VITE_GITHUB_URL: https://github.com/${{ github.repository }}
+          VITE_TOMLSMITH_CORE_VERSION: ${{ steps.core.outputs.version }}
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

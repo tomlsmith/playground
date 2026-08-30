@@ -1,0 +1,5 @@
+packages:
+  - "."
+
+# Quarantine newly published packages for one day before fresh resolution.
+minimumReleaseAge: 1440
