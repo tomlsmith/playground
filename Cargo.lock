@@ -238,9 +238,9 @@ dependencies = [
 
 [[package]]
 name = "tomlsmith"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8b4b495f6afda9f172eebae035a22d318349d61d69d705e09fef06714242c26"
+checksum = "82723f23fd73615f0c9cb6ffdd554d751d82241fc5ba5481e21990a1def40f93"
 dependencies = [
  "rowan",
  "text-size",
