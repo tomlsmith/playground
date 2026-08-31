@@ -66,14 +66,14 @@ describe("TomlSmith React playground", () => {
   it("shows the core crate version that produced the deployed WebAssembly", async () => {
     render(
       <App
-        coreVersion="0.1.0"
+        coreVersion="0.2.0"
         engine={new RecordingEngine()}
         storage={new MemoryStorage()}
         preferredLanguages={["en-US"]}
       />,
     );
 
-    expect(await screen.findByText(/core v0\.1\.0/u)).not.toBeNull();
+    expect(await screen.findByText(/core v0\.2\.0/u)).not.toBeNull();
   });
 
   it("uses the editor as the flexible body of the source panel", async () => {

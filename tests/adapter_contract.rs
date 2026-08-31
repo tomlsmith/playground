@@ -19,6 +19,28 @@ fn analysis_reports_version_tokens_diagnostics_and_statistics() {
 }
 
 #[test]
+fn analysis_preserves_structural_highlight_kinds_from_the_core_crate() {
+    let source = "[workspace]\nmembers = [\"core\"]\nmetadata = { enabled = true }\n[[bin]]\n";
+    let result = analyze(source, SourceVersion::V1_1);
+    let source_backed = result
+        .tokens
+        .iter()
+        .map(|token| {
+            (
+                token.kind.as_str(),
+                &source[token.range.start as usize..token.range.end as usize],
+            )
+        })
+        .collect::<Vec<_>>();
+
+    assert!(source_backed.contains(&("table", "workspace")));
+    assert!(source_backed.contains(&("array-key", "members")));
+    assert!(source_backed.contains(&("inline-table-key", "metadata")));
+    assert!(source_backed.contains(&("key", "enabled")));
+    assert!(source_backed.contains(&("array-table", "bin")));
+}
+
+#[test]
 fn analysis_applies_the_selected_language_version() {
     let result = analyze("escape = \"\\e\"\n", SourceVersion::V1_0);
 

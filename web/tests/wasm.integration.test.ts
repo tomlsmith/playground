@@ -43,6 +43,22 @@ describe("generated TomlSmith WebAssembly module", () => {
     }
   });
 
+  it("preserves structural highlight kinds from the published core crate", () => {
+    const result = analyze_toml(
+      '[workspace]\nmembers = ["core"]\nmetadata = { enabled = true }\n[[bin]]\n',
+      "1.1",
+    );
+
+    expect(result.tokens).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: "table" }),
+        expect.objectContaining({ kind: "array-key" }),
+        expect.objectContaining({ kind: "inline-table-key" }),
+        expect.objectContaining({ kind: "array-table" }),
+      ]),
+    );
+  });
+
   it("formats source through the generated browser glue", () => {
     expect(format_toml("answer=42\n", "1.1")).toMatchObject({
       status: "changed",

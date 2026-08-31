@@ -977,9 +977,28 @@ a.repository-link:hover {
   white-space: normal;
 }
 
-.preview-editor .cm-token--key,
-.preview-editor .cm-token--table {
+.preview-editor .cm-token--key {
   color: #145b91;
+  font-weight: 750;
+}
+
+.preview-editor .cm-token--array-key {
+  color: #087064;
+  font-weight: 750;
+}
+
+.preview-editor .cm-token--inline-table-key {
+  color: #8a5713;
+  font-weight: 750;
+}
+
+.preview-editor .cm-token--table {
+  color: #5f4296;
+  font-weight: 750;
+}
+
+.preview-editor .cm-token--array-table {
+  color: #8a3d72;
   font-weight: 750;
 }
 
@@ -1012,9 +1031,28 @@ a.repository-link:hover {
   text-decoration: underline wavy var(--error-red);
 }
 
-.token--key,
-.token--table {
+.token--key {
   color: #145b91;
+  font-weight: 750;
+}
+
+.token--array-key {
+  color: #087064;
+  font-weight: 750;
+}
+
+.token--inline-table-key {
+  color: #8a5713;
+  font-weight: 750;
+}
+
+.token--table {
+  color: #5f4296;
+  font-weight: 750;
+}
+
+.token--array-table {
+  color: #8a3d72;
   font-weight: 750;
 }
 

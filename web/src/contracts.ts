@@ -19,7 +19,10 @@ export interface Diagnostic {
 export interface TokenSpan {
   kind:
     | "key"
+    | "array-key"
+    | "inline-table-key"
     | "table"
+    | "array-table"
     | "string"
     | "number"
     | "boolean"

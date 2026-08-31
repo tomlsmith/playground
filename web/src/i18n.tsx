@@ -271,7 +271,10 @@ const EN_MESSAGES: Messages = {
     lexeme: "Lexeme",
     tokenKinds: {
       key: "Key",
+      "array-key": "Array key",
+      "inline-table-key": "Inline-table key",
       table: "Table",
+      "array-table": "Array table",
       string: "String",
       number: "Number",
       boolean: "Boolean",
@@ -455,7 +458,10 @@ const ZH_HANS_MESSAGES: Messages = {
     lexeme: "词素",
     tokenKinds: {
       key: "键",
+      "array-key": "数组键",
+      "inline-table-key": "内联表键",
       table: "表",
+      "array-table": "表数组",
       string: "字符串",
       number: "数字",
       boolean: "布尔值",

@@ -369,7 +369,10 @@ impl LineMap {
 const fn highlight_name(kind: HighlightKind) -> &'static str {
     match kind {
         HighlightKind::Key => "key",
+        HighlightKind::ArrayKey => "array-key",
+        HighlightKind::InlineTableKey => "inline-table-key",
         HighlightKind::Table => "table",
+        HighlightKind::ArrayTable => "array-table",
         HighlightKind::String => "string",
         HighlightKind::Number => "number",
         HighlightKind::Boolean => "boolean",
