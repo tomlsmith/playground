@@ -8,7 +8,7 @@
 
 TomlSmith Playground 通过 WebAssembly 使用 [TomlSmith](https://github.com/tomlsmith/tomlsmith)，分析与格式化都在当前浏览器标签页中运行。
 
-[打开 Playground](https://tomlsmith.github.io/playground/)，或从源码检出运行工作台。当前源码精确固定 TomlSmith core `0.3.0`；Cargo、CI 与部署会依据 `Cargo.toml` 和 `Cargo.lock` 从 crates.io 获取该版本。
+[打开 Playground](https://tomlsmith.github.io/playground/)，或从源码检出运行工作台。当前源码精确固定 TomlSmith core `0.3.1`；Cargo、CI 与部署会依据 `Cargo.toml` 和 `Cargo.lock` 从 crates.io 获取该版本。
 
 ## 主要功能
 
