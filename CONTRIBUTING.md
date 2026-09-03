@@ -16,6 +16,8 @@ pnpm dev
 
 The dev server serves `http://localhost:4173`.
 
+The WebAssembly build resolves the direct `tomlsmith` dependency through locked Cargo metadata and generates the runtime version module beside the WebAssembly bindings. Local development and release builds consume that generated value without a separately maintained version environment variable.
+
 CI and deployment use `cargo --locked`, so they build the exact crates.io package and checksum recorded in `Cargo.lock`. A core update must change the exact dependency version, refresh the lockfile, run the native adapter and generated-WebAssembly suites, and commit any corresponding contract updates.
 
 ## Development rules

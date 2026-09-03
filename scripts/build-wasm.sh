@@ -8,11 +8,16 @@ wasm_target="${playground_root}/target/wasm32-unknown-unknown/release/tomlsmith_
 wasm_output="${playground_root}/web/src/generated"
 
 "${cargo_command}" build \
+  --locked \
   --manifest-path "${playground_root}/Cargo.toml" \
   --target wasm32-unknown-unknown \
   --release
 
 mkdir -p "${wasm_output}"
+node "${playground_root}/scripts/generate-core-version.mjs" \
+  "${cargo_command}" \
+  "${playground_root}/Cargo.toml" \
+  "${wasm_output}/tomlsmith_core_version.ts"
 "${wasm_bindgen_command}" \
   --target web \
   --out-dir "${wasm_output}" \

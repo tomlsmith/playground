@@ -71,7 +71,7 @@ interface Messages {
     skipToSource: string;
     homeLabel: string;
     runtime: string;
-    runtimeCompact: string;
+    runtimeDetail: string;
     repositoryLabel: string;
     repositoryPendingLabel: string;
     footerCore: string;
@@ -168,8 +168,8 @@ const EN_MESSAGES: Messages = {
   app: {
     skipToSource: "Skip to TOML source",
     homeLabel: "TomlSmith Playground home",
-    runtime: "WASM · LOCAL ONLY",
-    runtimeCompact: "LOCAL",
+    runtime: "WASM",
+    runtimeDetail: "LOCAL ONLY",
     repositoryLabel: "Open the TomlSmith GitHub repository in a new tab",
     repositoryPendingLabel: "GitHub repository · coming soon",
     footerCore: "TomlSmith language core · MIT",
@@ -354,8 +354,8 @@ const ZH_HANS_MESSAGES: Messages = {
   app: {
     skipToSource: "跳转到 TOML 源码",
     homeLabel: "TomlSmith Playground 首页",
-    runtime: "WASM · 仅在本地运行",
-    runtimeCompact: "本地",
+    runtime: "WASM",
+    runtimeDetail: "仅在本地运行",
     repositoryLabel: "在新标签页打开 TomlSmith GitHub 仓库",
     repositoryPendingLabel: "GitHub 仓库 · 即将开放",
     footerCore: "TomlSmith 语言核心 · MIT",

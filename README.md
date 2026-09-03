@@ -19,7 +19,7 @@ TomlSmith Playground uses [TomlSmith](https://github.com/tomlsmith/tomlsmith) th
 - Inspect the formatted document, diagnostics, tokens, and document statistics side by side.
 - Start from an included example, then copy, download, or apply the formatted result.
 - Choose an English or Simplified Chinese interface. Source is not uploaded.
-- Deployed builds show the exact TomlSmith core crate version in the footer.
+- The masthead shows the exact TomlSmith core crate version beside the WASM runtime status in local and deployed builds.
 
 ## Keyboard shortcuts
 

@@ -63,17 +63,36 @@ describe("TomlSmith React playground", () => {
     expect(legacyCalls).toBe(0);
   });
 
-  it("shows the core crate version that produced the deployed WebAssembly", async () => {
+  it("keeps the generated version inline with runtime metadata", async () => {
+    const stylesheet = document.createElement("style");
+    stylesheet.textContent = playgroundStyles;
+    document.head.append(stylesheet);
+    onTestFinished(() => stylesheet.remove());
+
     render(
       <App
-        coreVersion="0.3.1"
+        coreVersion=" 0.3.1 "
         engine={new RecordingEngine()}
         storage={new MemoryStorage()}
         preferredLanguages={["en-US"]}
       />,
     );
 
-    expect(await screen.findByText(/core v0\.3\.1/u)).not.toBeNull();
+    const version = await screen.findByText("v0.3.1");
+    const runtimeMark = version.closest<HTMLElement>(".runtime-mark");
+    const engine = screen.getByText("WASM");
+    expect(runtimeMark).not.toBeNull();
+    expect(version.closest(".masthead")).not.toBeNull();
+    expect(version.closest(".site-footer")).toBeNull();
+    expect(runtimeMark?.textContent).not.toMatch(/core/iu);
+    expect(getComputedStyle(runtimeMark!).whiteSpace).toBe("nowrap");
+    expect(getComputedStyle(version).color).toBe(getComputedStyle(engine).color);
+    expect(getComputedStyle(version).fontSize).toBe(
+      getComputedStyle(engine).fontSize,
+    );
+    expect(getComputedStyle(version).fontWeight).toBe(
+      getComputedStyle(engine).fontWeight,
+    );
   });
 
   it("uses the editor as the flexible body of the source panel", async () => {

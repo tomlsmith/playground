@@ -26,7 +26,6 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
-  TOMLSMITH_CORE_VERSION: "0.3.1"
 
 jobs:
   build:
@@ -41,11 +40,8 @@ jobs:
       - name: Cache Rust artifacts
         uses: Swatinem/rust-cache@v2
       - name: Record resolved TomlSmith package
-        id: core
         run: |
           version=$(cargo metadata --locked --format-version 1 | jq --exit-status --raw-output '.packages[] | select(.name == "tomlsmith") | .version')
-          test "$version" = "$TOMLSMITH_CORE_VERSION"
-          echo "version=${version}" >> "$GITHUB_OUTPUT"
           echo "tomlsmith crate ${version}" >> "$GITHUB_STEP_SUMMARY"
       - name: Cache wasm-bindgen CLI
         id: cache-wasm-bindgen
@@ -73,10 +69,11 @@ jobs:
       - name: Type-check frontend
         run: pnpm exec tsc --project web/tsconfig.json --noEmit
       - name: Build production site
-        run: pnpm exec vite build --config web/vite.config.ts --base="/${{ github.event.repository.name }}/"
+        run: |
+          pnpm wasm:build
+          pnpm exec vite build --config web/vite.config.ts --base="/${{ github.event.repository.name }}/"
         env:
           VITE_GITHUB_URL: https://github.com/${{ github.repository }}
-          VITE_TOMLSMITH_CORE_VERSION: ${{ steps.core.outputs.version }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

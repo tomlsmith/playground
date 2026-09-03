@@ -152,26 +152,34 @@ button:disabled {
 
 .runtime-mark {
   display: flex;
-  gap: 8px;
   align-items: center;
   color: var(--muted-ink);
   font-family: var(--mono);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .runtime-mark i {
   width: 8px;
   height: 8px;
+  margin-right: 8px;
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--pass-teal);
   box-shadow: 0 0 0 1px var(--pass-teal);
+  flex: 0 0 8px;
 }
 
-.runtime-mark__compact {
-  display: none;
+.runtime-mark__separator {
+  margin-inline: 7px;
+  color: #8ba0b2;
+}
+
+.runtime-mark__version {
+  font-variant-numeric: tabular-nums;
 }
 
 .repository-link {
@@ -1297,12 +1305,8 @@ a.repository-link:hover {
     grid-template-columns: 194px minmax(0, 1fr);
   }
 
-  .runtime-mark__full {
+  .runtime-mark__detail {
     display: none;
-  }
-
-  .runtime-mark__compact {
-    display: inline;
   }
 
   .panel-header {
@@ -1364,8 +1368,18 @@ a.repository-link:hover {
     font-size: 0.8rem;
   }
 
-  .wordmark b,
+  .wordmark b {
+    display: none;
+  }
+
   .runtime-mark {
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+  }
+
+  .runtime-mark i,
+  .runtime-mark__engine,
+  .runtime-mark > .runtime-mark__separator {
     display: none;
   }
 

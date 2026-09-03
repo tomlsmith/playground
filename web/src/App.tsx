@@ -58,6 +58,7 @@ function LocalizedApp({
   repositoryUrl,
 }: AppProps) {
   const { messages } = useI18n();
+  const displayedCoreVersion = coreVersion?.trim() || null;
   const { state, actions } = usePlayground(
     {
       engine,
@@ -89,9 +90,24 @@ function LocalizedApp({
         <div className="masthead__utilities">
           <span className="runtime-mark">
             <i aria-hidden="true" />
-            <span className="runtime-mark__full">{messages.app.runtime}</span>
-            <span className="runtime-mark__compact">
-              {messages.app.runtimeCompact}
+            <span className="runtime-mark__engine">{messages.app.runtime}</span>
+            {displayedCoreVersion === null ? null : (
+              <>
+                {" "}
+                <span className="runtime-mark__separator" aria-hidden="true">
+                  ·
+                </span>{" "}
+                <span className="runtime-mark__version">
+                  v{displayedCoreVersion}
+                </span>
+              </>
+            )}
+            <span className="runtime-mark__detail">
+              {" "}
+              <span className="runtime-mark__separator" aria-hidden="true">
+                ·
+              </span>{" "}
+              {messages.app.runtimeDetail}
             </span>
           </span>
           <RepositoryLink href={repositoryUrl} />
@@ -124,12 +140,7 @@ function LocalizedApp({
       </div>
 
       <footer className="site-footer">
-        <span>
-          {messages.app.footerCore}
-          {coreVersion?.trim()
-            ? ` · core v${coreVersion.trim()}`
-            : ""}
-        </span>
+        <span>{messages.app.footerCore}</span>
         <span>{messages.app.footerPrivacy}</span>
       </footer>
       <p className="visually-hidden" aria-live="polite">

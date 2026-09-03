@@ -5,6 +5,7 @@ import "./styles.css";
 
 import { App } from "./App";
 import { resolveBrowserStorage } from "./browser-storage";
+import { TOMLSMITH_CORE_VERSION } from "./generated/tomlsmith_core_version";
 import { BrowserWasmEngine } from "./wasm-engine";
 
 const root = document.querySelector<HTMLElement>("#app");
@@ -15,7 +16,7 @@ if (root === null) {
 createRoot(root).render(
   <StrictMode>
     <App
-      coreVersion={import.meta.env.VITE_TOMLSMITH_CORE_VERSION}
+      coreVersion={TOMLSMITH_CORE_VERSION}
       engine={new BrowserWasmEngine()}
       storage={resolveBrowserStorage(window)}
       repositoryUrl={import.meta.env.VITE_GITHUB_URL}

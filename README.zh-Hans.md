@@ -19,7 +19,7 @@ TomlSmith Playground 通过 WebAssembly 使用 [TomlSmith](https://github.com/to
 - 并排查看格式化文档、诊断、词法单元和文档统计。
 - 从内置示例开始，并按需复制、下载或应用格式化结果。
 - 界面可选择英文或简体中文，不会上传源码。
-- 已部署构建会在页脚显示精确的 TomlSmith core crate 版本。
+- 本地与已部署构建都会在页首的 WASM 运行状态旁显示精确的 TomlSmith core crate 版本。
 
 ## 键盘快捷键
 
