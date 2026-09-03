@@ -8,7 +8,7 @@
 
 TomlSmith Playground uses [TomlSmith](https://github.com/tomlsmith/tomlsmith) through WebAssembly. Analysis and formatting run in the current browser tab.
 
-[Open the Playground](https://tomlsmith.github.io/playground/) or run the workbench from a source checkout. This checkout pins TomlSmith core `0.3.1`; Cargo, CI, and deployment obtain that exact release from crates.io using `Cargo.toml` and `Cargo.lock`.
+[Open the Playground](https://tomlsmith.github.io/playground/) or run the workbench from a source checkout. This checkout pins TomlSmith core `0.4.0`; Cargo, CI, and deployment obtain that exact release from crates.io using `Cargo.toml` and `Cargo.lock`.
 
 ## Features
 
